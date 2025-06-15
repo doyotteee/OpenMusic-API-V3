@@ -1,12 +1,12 @@
 -- Hapus tabel jika sudah ada (untuk memastikan clean state)
-DROP TABLE IF EXISTS playlist_song_activities;
-DROP TABLE IF EXISTS playlist_songs;
-DROP TABLE IF EXISTS collaborations;
-DROP TABLE IF EXISTS playlists;
-DROP TABLE IF EXISTS songs;
-DROP TABLE IF EXISTS albums;
-DROP TABLE IF EXISTS authentications;
-DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS playlist_song_activities CASCADE;
+DROP TABLE IF EXISTS collaborations CASCADE;
+DROP TABLE IF EXISTS playlist_songs CASCADE;
+DROP TABLE IF EXISTS playlists CASCADE;
+DROP TABLE IF EXISTS authentications CASCADE;
+DROP TABLE IF EXISTS songs CASCADE;
+DROP TABLE IF EXISTS albums CASCADE;
+DROP TABLE IF EXISTS users CASCADE;
 
 -- Membuat tabel users
 CREATE TABLE users (
