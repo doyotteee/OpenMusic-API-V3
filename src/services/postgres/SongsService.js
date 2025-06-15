@@ -6,11 +6,13 @@ const PostgresService = require('./PostgresService');
 class SongsService extends PostgresService {
   constructor() {
     super();
-  }  async addSong({ title, year, performer, genre, duration }) {
+  }
+
+  async addSong({ title, year, performer, genre, duration, albumId }) {
     const id = `song-${nanoid(16)}`;
     const query = {
-      text: 'INSERT INTO songs (id, title, year, performer, genre, duration) VALUES($1, $2, $3, $4, $5, $6) RETURNING id',
-      values: [id, title, year, performer, genre, duration],
+      text: 'INSERT INTO songs (id, title, year, performer, genre, duration, album_id) VALUES($1, $2, $3, $4, $5, $6, $7) RETURNING id',
+      values: [id, title, year, performer, genre, duration, albumId],
     };
     const result = await this.query(query.text, query.values);
     if (!result.rows[0].id) {
