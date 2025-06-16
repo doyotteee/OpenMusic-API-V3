@@ -18,9 +18,6 @@ if (missingEnvVars.length > 0) {
 const Hapi = require('@hapi/hapi');
 const Jwt = require('@hapi/jwt');
 
-// Migration utility
-const { runMigrations } = require('./utils/migrate');
-
 // songs
 const songs = require('./api/songs');
 const SongsService = require('./services/postgres/SongsService');
@@ -55,9 +52,7 @@ const CollaborationsValidator = require('./validator/collaborations');
 const ClientError = require('./exceptions/ClientError');
 
 const init = async () => {
-  // Run database migrations first
   console.log('🚀 Starting OpenMusic API V2...');
-  await runMigrations();
   
   // Initialize services
   const albumsService = new AlbumsService();

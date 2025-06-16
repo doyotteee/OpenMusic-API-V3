@@ -43,11 +43,7 @@ OpenMusic API V2 adalah backend service untuk aplikasi musik yang dibangun mengg
 
 3. **Setup database**
    
-   **Option 1: Automatic Migration (Recommended)**
-   Database migration akan berjalan OTOMATIS saat server start.
-   
-   **Option 2: Manual Migration**
-   Jika ingin menjalankan migration secara manual:
+   **WAJIB: Jalankan migration manual sebelum start server**
    ```bash
    npm run migrate
    ```
@@ -74,40 +70,31 @@ OpenMusic API V2 adalah backend service untuk aplikasi musik yang dibangun mengg
 
 5. **Run the server**
    ```bash
+   # SETELAH migration (step 3)
    npm start
    ```
    
-   Server akan:
-   - Menjalankan database migration secara otomatis
-   - Memulai server di port yang ditentukan (default: 5000)
-   - Siap menerima request API
+   Server akan start di port yang ditentukan (default: 5000)
 
 ## Database Migration
 
-Project ini menyediakan **2 cara menjalankan migration**:
+Project ini menggunakan **MANUAL MIGRATION** system:
 
-### **Option 1: Automatic Migration (Default)**
-- 🔄 **Otomatis**: Database schema dibuat OTOMATIS saat server start
-- 🛡️ **Safe**: Tidak akan menjalankan migration yang sama berulang kali
-- 🚀 **Zero Config**: Tidak perlu setup manual
-
-### **Option 2: Manual Migration** 
-Untuk reviewer/testing, migration dapat dijalankan secara manual:
-
+### **Setup Database (WAJIB)**
 ```bash
-# Via npm script (untuk reviewer)
+# Jalankan migration untuk membuat semua table
 npm run migrate
 
-# Atau langsung
-node migrate.js
+# Setelah itu baru start server
+npm start
 ```
 
 ### **Migration Details**
 - 📁 **Migration File**: `migrations/001_create_tables.sql` berisi semua tabel wajib
-- 🏷️ **Version Tracking**: Migration yang sudah dijalankan dicatat di tabel `schema_migrations`
-- ✅ **Production Ready**: Berjalan di environment manapun
+- 🏷️ **Version Tracking**: Migration yang sudah dijalankan dicatat di tabel `schema_migrations`  
+- 🛡️ **Safe Re-run**: Migration yang sama tidak akan dijalankan ulang
 
-**UNTUK REVIEWER: Gunakan `npm run migrate` untuk setup database manual sebelum testing.**
+**PENTING: Selalu jalankan `npm run migrate` sebelum `npm start`**
 
 ## API Documentation
 
