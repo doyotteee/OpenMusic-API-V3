@@ -4,8 +4,8 @@
   "description": "OpenMusic API with Playlist feature",
   "main": "src/server.js",  "scripts": {
     "start": "node src/server.js",
-    "start:dev": "nodemon src/server.js",
-    "migrate": "node migrate.js",
+    "start:dev": "nodemon src/server.js",    "migrate": "node-pg-migrate up --database-url postgres://$PGUSER:$PGPASSWORD@$PGHOST:$PGPORT/$PGDATABASE",
+    "migrate:down": "node-pg-migrate down --database-url postgres://$PGUSER:$PGPASSWORD@$PGHOST:$PGPORT/$PGDATABASE",
     "lint": "eslint src/",
     "lint:fix": "eslint src/ --fix"
   },
@@ -17,6 +17,7 @@
     "dotenv": "^16.3.1",
     "joi": "^17.9.2",
     "nanoid": "^3.3.6",
+    "node-pg-migrate": "^8.0.2",
     "pg": "^8.11.0"
   },
   "devDependencies": {

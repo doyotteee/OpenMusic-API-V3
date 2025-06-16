@@ -26,6 +26,7 @@ OpenMusic API V2 adalah backend service untuk aplikasi musik yang dibangun mengg
 - **Database**: PostgreSQL
 - **Authentication**: JWT (JSON Web Token)
 - **Validation**: Joi
+- **Migration**: node-pg-migrate
 - **Environment**: dotenv
 
 ## Setup & Installation
@@ -78,7 +79,7 @@ OpenMusic API V2 adalah backend service untuk aplikasi musik yang dibangun mengg
 
 ## Database Migration
 
-Project ini menggunakan **MANUAL MIGRATION** system:
+Project ini menggunakan **node-pg-migrate** untuk database migration:
 
 ### **Setup Database (WAJIB)**
 ```bash
@@ -90,9 +91,10 @@ npm start
 ```
 
 ### **Migration Details**
-- 📁 **Migration File**: `migrations/001_create_tables.sql` berisi semua tabel wajib
-- 🏷️ **Version Tracking**: Migration yang sudah dijalankan dicatat di tabel `schema_migrations`  
+- 📁 **Migration File**: `migrations/1671234567890_create-tables.js` berisi semua tabel wajib
+- 🏷️ **Version Tracking**: Migration yang sudah dijalankan dicatat di tabel `pgmigrations`  
 - 🛡️ **Safe Re-run**: Migration yang sama tidak akan dijalankan ulang
+- 🔄 **Rollback**: Gunakan `npm run migrate:down` untuk rollback
 
 **PENTING: Selalu jalankan `npm run migrate` sebelum `npm start`**
 
