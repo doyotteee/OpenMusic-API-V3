@@ -6,8 +6,7 @@ class SongsHandler {
     this._validator = validator;
 
     autoBind(this); // mem-bind nilai this untuk seluruh method sekaligus
-  }
-  async addSongHandler(request, h) {
+  }  async addSongHandler(request, h) {
     this._validator.validateSongPayload(request.payload);
     const { title, year, performer, genre, duration, albumId } = request.payload;
     const songId = await this._service.addSong({ title, year, performer, genre, duration, albumId });
