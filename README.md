@@ -84,10 +84,22 @@ Project ini menggunakan **node-pg-migrate** untuk database migration:
 ### **Setup Database (WAJIB)**
 ```bash
 # Jalankan migration untuk membuat semua table
-npm run migrate
+npm run migrate up
 
 # Setelah itu baru start server
 npm start
+```
+
+### **Migration Commands**
+```bash
+# Jalankan migration (create tables)
+npm run migrate up
+
+# Rollback migration (drop tables)
+npm run migrate down
+
+# Check migration status
+npm run migrate list
 ```
 
 ### **Migration Details**
@@ -96,7 +108,7 @@ npm start
 - 🛡️ **Safe Re-run**: Migration yang sama tidak akan dijalankan ulang
 - 🔄 **Rollback**: Gunakan `npm run migrate:down` untuk rollback
 
-**PENTING: Selalu jalankan `npm run migrate` sebelum `npm start`**
+**PENTING: Selalu jalankan `npm run migrate up` sebelum `npm start`**
 
 ## API Documentation
 
