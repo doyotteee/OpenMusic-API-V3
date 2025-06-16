@@ -182,8 +182,7 @@ const init = async () => {
     }
 
     return h.continue;
-  });
-  // Test route
+  });  // Test route
   server.route({
     method: 'GET',
     path: '/',
@@ -193,6 +192,26 @@ const init = async () => {
       timestamp: new Date().toISOString(),
     }),
   });
+
+  // Routes listing endpoint for debugging
+  server.route({
+    method: 'GET',
+    path: '/routes',
+    handler: (request) => {
+      const routes = request.server.table().map(route => ({
+        method: route.method.toUpperCase(),
+        path: route.path,
+        description: route.settings.description || 'No description',
+      }));
+      
+      return {
+        status: 'success',
+        totalRoutes: routes.length,
+        routes: routes.sort((a, b) => a.path.localeCompare(b.path)),
+      };
+    },
+  });
+
   // Health check route for debugging
   server.route({
     method: 'GET',

@@ -1,8 +1,3 @@
-
--- OpenMusic API V2 Database Schema
--- Auto-migration file - akan dijalankan otomatis saat server start
--- Semua tabel wajib sesuai kriteria submission Dicoding
-
 -- Hapus tabel jika sudah ada (untuk memastikan clean state)
 DROP TABLE IF EXISTS playlist_song_activities CASCADE;
 DROP TABLE IF EXISTS collaborations CASCADE;
