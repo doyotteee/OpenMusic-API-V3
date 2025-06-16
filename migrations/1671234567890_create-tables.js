@@ -1,5 +1,3 @@
-exports.shorthands = undefined;
-
 exports.up = pgm => {
   // Create users table
   pgm.createTable('users', {
