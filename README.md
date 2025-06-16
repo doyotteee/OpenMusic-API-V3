@@ -42,8 +42,15 @@ OpenMusic API V2 adalah backend service untuk aplikasi musik yang dibangun mengg
    ```
 
 3. **Setup database**
-   Database migration akan berjalan **OTOMATIS** saat server pertama kali dijalankan.
-   Tidak perlu setup manual apapun - semua tabel akan dibuat sesuai ERD.
+   
+   **Option 1: Automatic Migration (Recommended)**
+   Database migration akan berjalan OTOMATIS saat server start.
+   
+   **Option 2: Manual Migration**
+   Jika ingin menjalankan migration secara manual:
+   ```bash
+   npm run migrate
+   ```
 
 4. **Environment variables**
    Buat file `.env` dengan konfigurasi berikut:
@@ -77,15 +84,30 @@ OpenMusic API V2 adalah backend service untuk aplikasi musik yang dibangun mengg
 
 ## Database Migration
 
-Project ini menggunakan **AUTOMATIC MIGRATION** system:
+Project ini menyediakan **2 cara menjalankan migration**:
 
-- 🔄 **Automatic Migration**: Database schema dibuat OTOMATIS saat server dijalankan
+### **Option 1: Automatic Migration (Default)**
+- 🔄 **Otomatis**: Database schema dibuat OTOMATIS saat server start
+- 🛡️ **Safe**: Tidak akan menjalankan migration yang sama berulang kali
+- 🚀 **Zero Config**: Tidak perlu setup manual
+
+### **Option 2: Manual Migration** 
+Untuk reviewer/testing, migration dapat dijalankan secara manual:
+
+```bash
+# Via npm script (untuk reviewer)
+npm run migrate
+
+# Atau langsung
+node migrate.js
+```
+
+### **Migration Details**
 - 📁 **Migration File**: `migrations/001_create_tables.sql` berisi semua tabel wajib
 - 🏷️ **Version Tracking**: Migration yang sudah dijalankan dicatat di tabel `schema_migrations`
-- 🛡️ **Safe Re-run**: Migration yang sama tidak akan dijalankan ulang
-- ✅ **Production Ready**: Berjalan di environment manapun tanpa setup manual
+- ✅ **Production Ready**: Berjalan di environment manapun
 
-**TIDAK PERLU SETUP DATABASE MANUAL!** Semua tabel akan dibuat otomatis sesuai kriteria submission Dicoding.
+**UNTUK REVIEWER: Gunakan `npm run migrate` untuk setup database manual sebelum testing.**
 
 ## API Documentation
 
