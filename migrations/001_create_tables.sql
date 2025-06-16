@@ -1,3 +1,8 @@
+
+-- OpenMusic API V2 Database Schema
+-- Auto-migration file - akan dijalankan otomatis saat server start
+-- Semua tabel wajib sesuai kriteria submission Dicoding
+
 -- Hapus tabel jika sudah ada (untuk memastikan clean state)
 DROP TABLE IF EXISTS playlist_song_activities CASCADE;
 DROP TABLE IF EXISTS collaborations CASCADE;
@@ -78,3 +83,12 @@ CREATE TABLE playlist_song_activities (
     FOREIGN KEY (song_id) REFERENCES songs(id) ON DELETE CASCADE,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
+
+-- Create migration tracking table
+CREATE TABLE IF NOT EXISTS schema_migrations (
+    version VARCHAR(255) PRIMARY KEY,
+    applied_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Record this migration
+INSERT INTO schema_migrations (version) VALUES ('001_create_tables') ON CONFLICT (version) DO NOTHING;

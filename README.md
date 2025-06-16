@@ -42,8 +42,8 @@ OpenMusic API V2 adalah backend service untuk aplikasi musik yang dibangun mengg
    ```
 
 3. **Setup database**
-   - Buat database PostgreSQL
-   - Jalankan migration files yang ada di folder `migrations/`
+   Database migration akan berjalan **OTOMATIS** saat server pertama kali dijalankan.
+   Tidak perlu setup manual apapun - semua tabel akan dibuat sesuai ERD.
 
 4. **Environment variables**
    Buat file `.env` dengan konfigurasi berikut:
@@ -67,8 +67,25 @@ OpenMusic API V2 adalah backend service untuk aplikasi musik yang dibangun mengg
 
 5. **Run the server**
    ```bash
-   npm run start
+   npm start
    ```
+   
+   Server akan:
+   - Menjalankan database migration secara otomatis
+   - Memulai server di port yang ditentukan (default: 5000)
+   - Siap menerima request API
+
+## Database Migration
+
+Project ini menggunakan **AUTOMATIC MIGRATION** system:
+
+- 🔄 **Automatic Migration**: Database schema dibuat OTOMATIS saat server dijalankan
+- 📁 **Migration File**: `migrations/001_create_tables.sql` berisi semua tabel wajib
+- 🏷️ **Version Tracking**: Migration yang sudah dijalankan dicatat di tabel `schema_migrations`
+- 🛡️ **Safe Re-run**: Migration yang sama tidak akan dijalankan ulang
+- ✅ **Production Ready**: Berjalan di environment manapun tanpa setup manual
+
+**TIDAK PERLU SETUP DATABASE MANUAL!** Semua tabel akan dibuat otomatis sesuai kriteria submission Dicoding.
 
 ## API Documentation
 
