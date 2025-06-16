@@ -5,11 +5,14 @@ const path = require('path');
 class Database {
   constructor() {
     this._pool = new Pool({
-      user: process.env.PGUSER,
-      host: process.env.PGHOST,
-      database: process.env.PGDATABASE,
-      password: process.env.PGPASSWORD,
-      port: process.env.PGPORT,
+      user: process.env.PGUSER || 'postgres',
+      host: process.env.PGHOST || 'localhost',
+      database: process.env.PGDATABASE || 'openmusic',
+      password: process.env.PGPASSWORD || '',
+      port: process.env.PGPORT || 5432,
+      connectionTimeoutMillis: 5000,
+      idleTimeoutMillis: 30000,
+      max: 20,
     });
   }
 

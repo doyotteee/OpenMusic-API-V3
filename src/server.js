@@ -1,4 +1,20 @@
 require('dotenv').config();
+
+// Validate required environment variables
+const requiredEnvVars = ['PGUSER', 'PGHOST', 'PGDATABASE', 'ACCESS_TOKEN_KEY', 'REFRESH_TOKEN_KEY'];
+const missingEnvVars = requiredEnvVars.filter(envVar => !process.env[envVar]);
+
+if (missingEnvVars.length > 0) {
+  console.error('❌ Missing required environment variables:', missingEnvVars.join(', '));
+  console.log('💡 Please check your .env file');
+  // Set default values for missing vars to prevent crash
+  if (!process.env.PGUSER) process.env.PGUSER = 'postgres';
+  if (!process.env.PGHOST) process.env.PGHOST = 'localhost';
+  if (!process.env.PGDATABASE) process.env.PGDATABASE = 'openmusic';
+  if (!process.env.ACCESS_TOKEN_KEY) process.env.ACCESS_TOKEN_KEY = 'fallback-access-token-key';
+  if (!process.env.REFRESH_TOKEN_KEY) process.env.REFRESH_TOKEN_KEY = 'fallback-refresh-token-key';
+}
+
 const Hapi = require('@hapi/hapi');
 const Jwt = require('@hapi/jwt');
 
@@ -167,14 +183,39 @@ const init = async () => {
 
     return h.continue;
   });
-
   // Test route
   server.route({
     method: 'GET',
     path: '/',
     handler: () => ({
       message: 'OpenMusic API V2 is running!',
+      version: '2.0.0',
+      timestamp: new Date().toISOString(),
     }),
+  });
+  // Health check route for debugging
+  server.route({
+    method: 'GET',
+    path: '/health',
+    handler: async () => {
+      try {
+        // Test database connection with a simple query
+        const testQuery = await albumsService.query('SELECT NOW()');
+        return {
+          status: 'healthy',
+          database: 'connected',
+          timestamp: new Date().toISOString(),
+          dbTime: testQuery.rows[0].now,
+        };
+      } catch (error) {
+        return {
+          status: 'unhealthy', 
+          database: 'disconnected',
+          error: error.message,
+          timestamp: new Date().toISOString(),
+        };
+      }
+    },
   });
 
   await server.start();
