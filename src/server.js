@@ -133,12 +133,12 @@ const init = async () => {
         songsService,
         validator: PlaylistsValidator,
       },
-    },
-    {
+    },    {
       plugin: collaborations,
       options: {
         service: collaborationsService,
         playlistsService,
+        usersService,
         validator: CollaborationsValidator,
       },
     },
