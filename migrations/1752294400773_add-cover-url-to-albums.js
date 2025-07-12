@@ -1,9 +1,9 @@
 exports.up = (pgm) => {
-  pgm.addColumn('albums', {
-    cover_url: { type: 'text' }
-  });
+  // This migration file is not needed as cover_url column 
+  // is already included in the main migration file
+  // No operations needed
 };
 
 exports.down = (pgm) => {
-  pgm.dropColumn('albums', 'cover_url');
+  // No operations needed as column is managed in main migration
 };
