@@ -17,6 +17,7 @@ exports.up = pgm => {
     id: { type: 'varchar(50)', primaryKey: true },
     name: { type: 'text', notNull: true },
     year: { type: 'integer', notNull: true },
+    cover_url: { type: 'text' },
   });
 
   // Create songs table
@@ -60,9 +61,20 @@ exports.up = pgm => {
     action: { type: 'varchar(50)', notNull: true },
     time: { type: 'timestamp', default: pgm.func('current_timestamp') },
   });
+
+  // Create user_album_likes table
+  pgm.createTable('user_album_likes', {
+    id: { type: 'varchar(50)', primaryKey: true },
+    user_id: { type: 'varchar(50)', notNull: true, references: 'users(id)', onDelete: 'CASCADE' },
+    album_id: { type: 'varchar(50)', notNull: true, references: 'albums(id)', onDelete: 'CASCADE' },
+  });
+
+  // Add unique constraint for user_album_likes
+  pgm.addConstraint('user_album_likes', 'unique_user_album_like', 'UNIQUE(user_id, album_id)');
 };
 
 exports.down = pgm => {
+  pgm.dropTable('user_album_likes');
   pgm.dropTable('playlist_song_activities');
   pgm.dropTable('collaborations');
   pgm.dropTable('playlist_songs');

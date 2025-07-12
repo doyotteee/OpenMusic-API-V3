@@ -129,7 +129,7 @@ class PlaylistsService extends PostgresService {
 
     try {
       await this.query(query.text, query.values);
-    } catch (error) {
+    } catch {
       console.log('⚠️ Activities table not found, skipping activity recording');
     }
   }
@@ -148,7 +148,7 @@ class PlaylistsService extends PostgresService {
     try {
       const result = await this.query(query.text, query.values);
       return result.rows;
-    } catch (error) {
+    } catch {
       return [];
     }
   }
@@ -191,7 +191,7 @@ class PlaylistsService extends PostgresService {
         if (!result.rows.length) {
           throw new AuthorizationError('Anda tidak berhak mengakses resource ini');
         }
-      } catch (collabError) {
+      } catch {
         throw new AuthorizationError('Anda tidak berhak mengakses resource ini');
       }
     }

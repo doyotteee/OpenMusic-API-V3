@@ -17,6 +17,8 @@ if (missingEnvVars.length > 0) {
 
 const Hapi = require('@hapi/hapi');
 const Jwt = require('@hapi/jwt');
+const Inert = require('@hapi/inert');
+const path = require('path');
 
 // songs
 const songs = require('./api/songs');
@@ -49,18 +51,40 @@ const collaborations = require('./api/collaborations');
 const CollaborationsService = require('./services/postgres/CollaborationsService');
 const CollaborationsValidator = require('./validator/collaborations');
 
+// exports
+const _exports = require('./api/exports');
+const ProducerService = require('./services/rabbitmq/ProducerService');
+const ExportsValidator = require('./validator/exports');
+
+// uploads
+const uploads = require('./api/uploads');
+const StorageService = require('./services/storage/StorageService');
+const UploadsValidator = require('./validator/uploads');
+
+// cache
+const CacheService = require('./services/redis/CacheService');
+
 const ClientError = require('./exceptions/ClientError');
 
 const init = async () => {
   console.log('🚀 Starting OpenMusic API V2...');
   
   // Initialize services
-  const albumsService = new AlbumsService();
+  let cacheService = null;
+  try {
+    cacheService = new CacheService();
+    console.log('✅ Cache service initialized');
+  } catch {
+    console.log('⚠️ Cache service not available, running without cache');
+  }
+  
+  const albumsService = new AlbumsService(cacheService);
   const songsService = new SongsService();
   const usersService = new UsersService();
   const authenticationsService = new AuthenticationsService();
   const playlistsService = new PlaylistsService();
   const collaborationsService = new CollaborationsService();
+  const storageService = new StorageService(path.resolve(__dirname, '../upload/images'));
 
   const server = Hapi.server({
     port: process.env.PORT || 5000,
@@ -76,6 +100,9 @@ const init = async () => {
   await server.register([
     {
       plugin: Jwt,
+    },
+    {
+      plugin: Inert,
     },
   ]);
 
@@ -142,7 +169,34 @@ const init = async () => {
         validator: CollaborationsValidator,
       },
     },
+    {
+      plugin: _exports,
+      options: {
+        service: ProducerService,
+        playlistsService,
+        validator: ExportsValidator,
+      },
+    },
+    {
+      plugin: uploads,
+      options: {
+        storageService,
+        albumsService,
+        validator: UploadsValidator,
+      },
+    },
   ]);
+
+  // Static file serving for images
+  server.route({
+    method: 'GET',
+    path: '/upload/images/{param*}',
+    handler: {
+      directory: {
+        path: path.resolve(__dirname, '../upload/images'),
+      },
+    },
+  });
 
   // Error handling
   server.ext('onPreResponse', (request, h) => {
